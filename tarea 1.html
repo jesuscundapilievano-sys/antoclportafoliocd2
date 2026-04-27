@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tim Berners-Lee – Cultura Digital 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --azul-deep:   #0a1628;
+      --azul-mid:    #0d2a5e;
+      --azul-accent: #1565c0;
+      --azul-bright: #42a5f5;
+      --azul-glow:   #90caf9;
+      --verde:       #00e5b0;
+      --blanco:      #ffffff;
+      --gris-card:   #e8ecf0;
+      --gris-dark:   #37474f;
+      --negro:       #1a1a1a;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Nunito',sans-serif; background:#f0f4f8; color:var(--negro); }
+
+    /* ── BOTÓN VOLVER ── */
+    .nav-back {
+      position: fixed;
+      top: 18px; left: 18px;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(10,22,40,0.75);
+      backdrop-filter: blur(10px);
+      color: var(--azul-glow);
+      text-decoration: none;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      padding: 9px 18px 9px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(144,202,249,0.3);
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-back:hover {
+      background: rgba(21,101,192,0.85);
+      transform: translateX(-3px);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+    .nav-back svg { width:16px; height:16px; fill:currentColor; }
+
+    /* ── HERO / PORTADA ── */
+    .hero {
+      min-height: 92vh;
+      background: linear-gradient(160deg, #050d1a 0%, #0a1f45 45%, #0d3578 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Red decorativa tipo WWW */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(66,165,245,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(66,165,245,0.06) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    /* Nodo central brillante */
+    .hero-orb {
+      position: absolute;
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,176,0.12) 0%, rgba(21,101,192,0.08) 40%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      animation: pulse 5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity:0.8; }
+      50%      { transform: translate(-50%,-50%) scale(1.1); opacity:1; }
+    }
+
+    /* Líneas de conexión decorativas */
+    .hero-lines {
+      position: absolute; inset:0; pointer-events:none;
+    }
+    .hero-lines::before, .hero-lines::after {
+      content:'';
+      position:absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(0,229,176,0.12);
+    }
+    .hero-lines::before { width:550px;height:550px; top:50%;left:50%; transform:translate(-50%,-50%); }
+    .hero-lines::after  { width:750px;height:750px; top:50%;left:50%; transform:translate(-50%,-50%); }
+
+    .hero-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--verde);
+      background: rgba(0,229,176,0.1);
+      border: 1px solid rgba(0,229,176,0.3);
+      border-radius: 50px;
+      padding: 5px 16px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .hero-foto {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--verde);
+      box-shadow: 0 0 0 8px rgba(0,229,176,0.12), 0 12px 40px rgba(0,0,0,0.5);
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    .hero-nombre {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5.5vw, 3.8rem);
+      font-weight: 900;
+      color: var(--blanco);
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+      animation: fadeUp 0.8s ease 0.2s both;
+      margin-bottom: 14px;
+    }
+
+    .hero-subtitulo {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--azul-bright);
+      letter-spacing: 0.1em;
+      animation: fadeUp 0.8s ease 0.3s both;
+      margin-bottom: 22px;
+    }
+
+    .hero-desc {
+      max-width: 560px;
+      font-size: 0.97rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      animation: fadeUp 0.8s ease 0.4s both;
+      margin-bottom: 36px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s ease 0.5s both;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--verde);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: rgba(255,255,255,0.3);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    .scroll-hint svg { width:18px;height:18px;fill:currentColor; }
+    @keyframes bounce {
+      0%,100%{transform:translateX(-50%) translateY(0);}
+      50%{transform:translateX(-50%) translateY(6px);}
+    }
+
+    /* ── CONTENIDO ARTÍCULO ── */
+    .articulo {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .seccion {
+      background: var(--blanco);
+      border-radius: 18px;
+      padding: 36px 40px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 20px rgba(13,42,94,0.09);
+      border-left: 4px solid var(--azul-bright);
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .seccion.verde-border { border-left-color: var(--verde); }
+    .seccion.dark-bg {
+      background: var(--azul-deep);
+      border-left-color: var(--verde);
+      color: rgba(255,255,255,0.85);
+    }
+
+    .seccion h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--azul-accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .seccion.dark-bg h2 { color: var(--verde); }
+    .seccion h2 .ico { font-size:1.2rem; }
+
+    .seccion p {
+      font-size: 0.97rem;
+      line-height: 1.8;
+      color: var(--gris-dark);
+      margin-bottom: 12px;
+    }
+    .seccion.dark-bg p { color: rgba(255,255,255,0.7); }
+    .seccion p:last-child { margin-bottom: 0; }
+
+    /* Timeline */
+    .timeline { list-style: none; position:relative; padding-left: 28px; }
+    .timeline::before {
+      content:'';
+      position:absolute;
+      left: 7px; top:0; bottom:0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--azul-bright), var(--verde));
+      border-radius: 2px;
+    }
+    .timeline li {
+      position: relative;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--gris-dark);
+    }
+    .timeline li::before {
+      content:'';
+      position:absolute;
+      left:-21px; top:6px;
+      width:10px; height:10px;
+      border-radius:50%;
+      background: var(--azul-bright);
+      border: 2px solid var(--blanco);
+      box-shadow: 0 0 0 2px var(--azul-bright);
+    }
+    .timeline li strong {
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--azul-accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    /* Aportaciones grid */
+    .aport-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+    .aport-item {
+      background: #f0f4f8;
+      border-radius: 12px;
+      padding: 18px 16px;
+      text-align: center;
+      border: 1px solid rgba(21,101,192,0.12);
+    }
+    .aport-item .aport-ico { font-size: 2rem; margin-bottom: 8px; display:block; }
+    .aport-item h4 {
+      font-family:'Orbitron',sans-serif;
+      font-size:0.72rem;
+      font-weight:700;
+      color:var(--azul-accent);
+      letter-spacing:0.08em;
+      margin-bottom:6px;
+    }
+    .aport-item p { font-size:0.8rem; color:var(--gris-dark); line-height:1.5; margin:0; }
+
+    /* Cita destacada */
+    .quote {
+      background: linear-gradient(135deg, var(--azul-mid), var(--azul-deep));
+      border-radius: 18px;
+      padding: 36px 40px;
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(13,42,94,0.25);
+    }
+    .quote::before {
+      content: '"';
+      position:absolute;
+      font-family:'Georgia',serif;
+      font-size: 14rem;
+      line-height: 1;
+      color: rgba(66,165,245,0.08);
+      top: -30px; left: 10px;
+      pointer-events:none;
+    }
+    .quote p {
+      font-size: 1.15rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.7;
+      margin-bottom: 14px;
+      position:relative;
+    }
+    .quote cite {
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--verde);
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--azul-deep);
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      padding: 28px 20px;
+      font-size: 0.88rem;
+      line-height: 1.9;
+    }
+    footer strong { color: var(--azul-glow); }
+    footer .sep { margin:0 8px; opacity:0.35; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(22px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    @media(max-width:560px){
+      .seccion { padding:26px 22px; }
+      .hero-stats { gap:20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- BOTÓN VOLVER -->
+<a href="index.html" class="nav-back">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Volver al Portafolio
+</a>
+
+<!-- HERO PORTADA -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-lines"></div>
+
+  <span class="hero-badge">Tarea 01 &nbsp;·&nbsp; Cultura Digital 2</span>
+
+  <img class="hero-foto"
+       src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Sir_Tim_Berners-Lee_%28cropped%29.jpg/440px-Sir_Tim_Berners-Lee_%28cropped%29.jpg"
+       alt="Tim Berners-Lee" />
+
+  <h1 class="hero-nombre">Tim Berners-Lee</h1>
+  <p class="hero-subtitulo">El Padre de la World Wide Web</p>
+  <p class="hero-desc">
+    El científico británico que en 1989 conectó el mundo con una idea que cambiaría la historia de la humanidad: la Web.
+  </p>
+
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-num">1955</span>
+      <span class="stat-label">Año de nacimiento</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">1991</span>
+      <span class="stat-label">Lanzamiento de la WWW</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5B+</span>
+      <span class="stat-label">Usuarios en internet</span>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>
+    Leer más
+  </div>
+</section>
+
+<!-- CONTENIDO -->
+<main class="articulo">
+
+  <!-- Quién es -->
+  <div class="seccion">
+    <h2><span class="ico">👤</span> ¿Quién es Tim Berners-Lee?</h2>
+    <p>
+      Sir Timothy John Berners-Lee, nacido el <strong>8 de junio de 1955</strong> en Londres, Inglaterra,
+      es un científico informático ampliamente reconocido como el inventor de la <strong>World Wide Web (WWW)</strong>.
+      Estudió física en el University College de Oxford y desarrolló su carrera en el CERN, el laboratorio europeo
+      de física de partículas en Suiza.
+    </p>
+    <p>
+      Su contribución no solo transformó la manera en que compartimos información, sino que redefinió por completo
+      la comunicación humana, la educación, el comercio y la cultura global. A diferencia de muchos inventores,
+      Berners-Lee decidió no patentar su invención y <strong>la entregó libremente al mundo</strong>.
+    </p>
+  </div>
+
+  <!-- Línea del tiempo -->
+  <div class="seccion verde-border">
+    <h2><span class="ico">📅</span> Línea del Tiempo</h2>
+    <ul class="timeline">
+      <li>
+        <strong>1955</strong>
+        Nace en Londres. Sus padres trabajaron en el primer ordenador comercial de la historia, el Ferranti Mark 1.
+      </li>
+      <li>
+        <strong>1976</strong>
+        Se gradúa en Física en la Universidad de Oxford con honores.
+      </li>
+      <li>
+        <strong>1980</strong>
+        Trabaja como consultor en el CERN y desarrolla <em>ENQUIRE</em>, un sistema de hipertexto interno, precursor de la Web.
+      </li>
+      <li>
+        <strong>1989</strong>
+        Propone a sus jefes del CERN un sistema de gestión de información global basado en hipertexto. La respuesta fue: <em>"Vago pero emocionante"</em>.
+      </li>
+      <li>
+        <strong>1990</strong>
+        Crea el primer servidor web, el primer navegador (WorldWideWeb) y las bases del HTML, HTTP y URL.
+      </li>
+      <li>
+        <strong>1991</strong>
+        La World Wide Web se hace pública. El primer sitio web del mundo sigue activo: <em>info.cern.ch</em>
+      </li>
+      <li>
+        <strong>1994</strong>
+        Funda el <strong>W3C (World Wide Web Consortium)</strong> en el MIT para estandarizar y guiar el crecimiento de la Web.
+      </li>
+      <li>
+        <strong>2004</strong>
+        Recibe el título de Caballero (Sir) del Reino Unido por sus servicios al desarrollo global de internet.
+      </li>
+      <li>
+        <strong>2012</strong>
+        Aparece en la ceremonia de apertura de los Juegos Olímpicos de Londres, tuiteando en vivo: <em>"This is for everyone"</em>.
+      </li>
+      <li>
+        <strong>2016</strong>
+        Recibe el Premio Turing, considerado el Nobel de la informática.
+      </li>
+    </ul>
+  </div>
+
+  <!-- Aportaciones -->
+  <div class="seccion">
+    <h2><span class="ico">💡</span> Sus Grandes Aportaciones</h2>
+    <div class="aport-grid">
+      <div class="aport-item">
+        <span class="aport-ico">🌐</span>
+        <h4>HTML</h4>
+        <p>HyperText Markup Language, el lenguaje base para crear páginas web.</p>
+      </div>
+      <div class="aport-item">
+        <span class="aport-ico">🔗</span>
+        <h4>HTTP</h4>
+        <p>Protocolo de transferencia que permite la comunicación entre navegadores y servidores.</p>
+      </div>
+      <div class="aport-item">
+        <span class="aport-ico">📍</span>
+        <h4>URL</h4>
+        <p>Sistema de direcciones que identifica de forma única cada recurso en la Web.</p>
+      </div>
+      <div class="aport-item">
+        <span class="aport-ico">📋</span>
+        <h4>W3C</h4>
+        <p>Consorcio que define los estándares abiertos que mantienen a la Web accesible para todos.</p>
+      </div>
+      <div class="aport-item">
+        <span class="aport-ico">🔓</span>
+        <h4>Web Abierta</h4>
+        <p>Renunció a patentar su invención para que la Web fuera libre y gratuita para la humanidad.</p>
+      </div>
+      <div class="aport-item">
+        <span class="aport-ico">🕸️</span>
+        <h4>Web Semántica</h4>
+        <p>Visión futura de una Web donde los datos son comprensibles por máquinas e inteligencia artificial.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cita -->
+  <div class="quote">
+    <p>
+      La Web no es para mí, es para todos. Diseñé la Web para que fuera un espacio
+      abierto, donde cualquier persona pudiera acceder al conocimiento y compartir
+      sus ideas sin restricciones.
+    </p>
+    <cite>— Tim Berners-Lee</cite>
+  </div>
+
+  <!-- Impacto -->
+  <div class="seccion dark-bg">
+    <h2><span class="ico">🌍</span> Su Impacto en el Mundo</h2>
+    <p>
+      Gracias a Tim Berners-Lee hoy existen más de <strong>1,900 millones de sitios web</strong> activos y
+      más de <strong>5,000 millones de personas</strong> conectadas a internet. La educación, la medicina,
+      el entretenimiento, el comercio y la política global funcionan gracias a la infraestructura que él diseñó.
+    </p>
+    <p>
+      Su decisión de no patentar la WWW y de impulsarla como bien común es considerada uno de los actos
+      más generosos en la historia de la tecnología. De haber cobrado regalías, hoy sería uno de los hombres
+      más ricos del planeta.
+    </p>
+    <p>
+      Actualmente lidera el proyecto <strong>Solid</strong>, una iniciativa para devolver a los usuarios
+      el control de sus datos personales en la Web, en respuesta al uso abusivo de la información por parte
+      de las grandes plataformas tecnológicas.
+    </p>
+  </div>
+
+  <!-- Reflexión -->
+  <div class="seccion verde-border">
+    <h2><span class="ico">🧠</span> ¿Qué Podemos Aprender de Él?</h2>
+    <p>
+      Tim Berners-Lee nos enseña que la tecnología más poderosa es aquella que se comparte. En un mundo donde
+      el conocimiento se acumula para generar poder económico, él eligió el camino opuesto: poner su mayor
+      creación al servicio de la humanidad.
+    </p>
+    <p>
+      En el contexto de la Inteligencia Artificial, su legado nos invita a reflexionar: ¿cómo aseguramos
+      que las nuevas tecnologías también sean accesibles, éticas y abiertas para todos, y no herramientas
+      de exclusión o control?
+    </p>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>Bachillerato Tecnológico Industrial y de Servicios No. 144</strong></p>
+  <p>
+    Especialidad: <strong>Inteligencia Artificial</strong>
+    <span class="sep">|</span>
+    Alumno: <strong>Antonio</strong>
+  </p>
+  <p style="margin-top:8px;font-size:0.76rem;opacity:0.4;">
+    Cultura Digital 2 &nbsp;·&nbsp; Tarea 01 &nbsp;·&nbsp; Tim Berners-Lee
+  </p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Guía de HTML5 · Futurista</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;900&family=Share+Tech+Mono&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #040a12;
+      --surface:   #070f1c;
+      --panel:     #0b1826;
+      --accent:    #00f0ff;
+      --accent2:   #ff2a6d;
+      --accent3:   #7b2fff;
+      --text:      #c8e6f5;
+      --text-dim:  #5a8aa8;
+      --glow:      0 0 12px #00f0ff88, 0 0 30px #00f0ff33;
+      --glow2:     0 0 12px #ff2a6d88, 0 0 30px #ff2a6d33;
+      --border:    1px solid #00f0ff22;
+      --font-head: 'Orbitron', sans-serif;
+      --font-body: 'Exo 2', sans-serif;
+      --font-code: 'Share Tech Mono', monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,240,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.15) 2px,rgba(0,0,0,.15) 4px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ═══ NAVBAR ═══ */
+    nav.topnav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: .75rem 2rem;
+      background: rgba(4,10,18,.9);
+      border-bottom: 1px solid var(--accent);
+      backdrop-filter: blur(12px);
+    }
+    .btn-back {
+      font-family: var(--font-head);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--accent);
+      background: transparent;
+      border: 1px solid var(--accent);
+      padding: .45rem 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      transition: all .25s;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .btn-back:hover { background: var(--accent); color: var(--bg); box-shadow: var(--glow); }
+    .btn-back svg { width: 14px; height: 14px; }
+    .nav-brand {
+      font-family: var(--font-head);
+      font-size: .75rem;
+      letter-spacing: .2em;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      margin-left: auto;
+    }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .hero-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid;
+      animation: pulse-ring 4s ease-in-out infinite;
+      opacity: 0;
+    }
+    .hero-ring:nth-child(1) { width: 300px; height: 300px; border-color: var(--accent); animation-delay: 0s; }
+    .hero-ring:nth-child(2) { width: 500px; height: 500px; border-color: var(--accent3); animation-delay: 1s; }
+    .hero-ring:nth-child(3) { width: 700px; height: 700px; border-color: var(--accent); animation-delay: 2s; }
+    @keyframes pulse-ring {
+      0%   { transform: scale(.8); opacity: 0; }
+      50%  { opacity: .3; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+    .hero-badge {
+      font-family: var(--font-head);
+      font-size: .65rem;
+      letter-spacing: .3em;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: .3rem 1.2rem;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+      animation: fade-up .8s ease both;
+    }
+    .hero-title {
+      font-family: var(--font-head);
+      font-size: clamp(2.4rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: .05em;
+      animation: fade-up .8s ease .15s both;
+    }
+    .hero-title .hl  { color: var(--accent);  text-shadow: var(--glow); }
+    .hero-title .hl2 { color: var(--accent2); text-shadow: var(--glow2); }
+    .hero-sub {
+      font-family: var(--font-code);
+      font-size: clamp(.85rem, 2vw, 1.1rem);
+      color: var(--text-dim);
+      margin-top: 1.2rem;
+      letter-spacing: .15em;
+      animation: fade-up .8s ease .3s both;
+    }
+    .hero-cta {
+      margin-top: 2.5rem;
+      animation: fade-up .8s ease .45s both;
+    }
+    .btn-primary {
+      font-family: var(--font-head);
+      font-size: .7rem;
+      letter-spacing: .15em;
+      color: var(--bg);
+      background: var(--accent);
+      border: none;
+      padding: .8rem 2rem;
+      cursor: pointer;
+      text-decoration: none;
+      clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+      transition: all .25s;
+      box-shadow: var(--glow);
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #fff; box-shadow: 0 0 30px #fff; }
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      animation: fade-up .8s ease .6s both;
+    }
+    .hero-stat .num {
+      font-family: var(--font-head);
+      font-size: 1.8rem;
+      color: var(--accent);
+      text-shadow: var(--glow);
+    }
+    .hero-stat .lbl {
+      font-family: var(--font-code);
+      font-size: .65rem;
+      color: var(--text-dim);
+      letter-spacing: .2em;
+    }
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      animation: fade-up .8s ease .8s both;
+    }
+    .scroll-hint span { font-family: var(--font-code); font-size: .6rem; letter-spacing: .2em; color: var(--text-dim); }
+    .scroll-arrow {
+      width: 20px; height: 20px;
+      border-right: 2px solid var(--accent);
+      border-bottom: 2px solid var(--accent);
+      transform: rotate(45deg);
+      animation: bounce-down 1.5s ease-in-out infinite;
+    }
+    @keyframes bounce-down {
+      0%,100% { transform: rotate(45deg) translateY(0); }
+      50%      { transform: rotate(45deg) translateY(6px); }
+    }
+
+    /* ═══ LAYOUT ═══ */
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ═══ SIDEBAR ═══ */
+    .sidebar {
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      border-right: var(--border);
+      background: rgba(7,15,28,.6);
+      backdrop-filter: blur(8px);
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--accent); }
+    .sidebar-title {
+      font-family: var(--font-head);
+      font-size: .6rem;
+      letter-spacing: .3em;
+      color: var(--accent2);
+      margin-bottom: 1.5rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--accent2);
+    }
+    .sidebar-nav a {
+      display: block;
+      font-family: var(--font-code);
+      font-size: .75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      padding: .5rem .8rem;
+      border-left: 2px solid transparent;
+      transition: all .2s;
+      line-height: 1.4;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+      background: rgba(0,240,255,.05);
+      text-shadow: 0 0 8px var(--accent);
+    }
+    .sidebar-nav a .idx { color: var(--accent2); margin-right: .4rem; }
+
+    /* ═══ MAIN ═══ */
+    .main { padding: 3rem 3rem 6rem; }
+
+    .section { margin-bottom: 5rem; scroll-margin-top: 80px; }
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .section-num {
+      font-family: var(--font-head);
+      font-size: .65rem;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: .2rem .6rem;
+      letter-spacing: .1em;
+    }
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      color: var(--accent);
+      text-shadow: var(--glow);
+      letter-spacing: .05em;
+    }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-top: .4rem;
+    }
+
+    /* ═══ CARD ═══ */
+    .card {
+      background: var(--panel);
+      border: var(--border);
+      border-top: 2px solid var(--accent);
+      padding: 1.8rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .3s, box-shadow .3s;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 60px; height: 60px;
+      background: radial-gradient(circle at 100% 0%, rgba(0,240,255,.1), transparent 70%);
+    }
+    .card:hover { border-top-color: var(--accent2); box-shadow: 0 0 20px rgba(0,240,255,.08); }
+    .card h3 {
+      font-family: var(--font-head);
+      font-size: .85rem;
+      letter-spacing: .1em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    p { line-height: 1.9; font-size: .95rem; color: var(--text); margin-bottom: .8rem; }
+    ul, ol { padding-left: 1.5rem; margin-bottom: .8rem; }
+    li { line-height: 1.8; font-size: .95rem; color: var(--text); margin-bottom: .3rem; }
+    li::marker { color: var(--accent); }
+
+    /* ═══ CODE ═══ */
+    .code-block {
+      background: #020810;
+      border: 1px solid #00f0ff22;
+      border-left: 3px solid var(--accent);
+      padding: 1.4rem 1.6rem;
+      margin: 1.2rem 0;
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block::before {
+      content: attr(data-lang);
+      position: absolute;
+      top: .5rem; right: .8rem;
+      font-family: var(--font-code);
+      font-size: .6rem;
+      color: var(--accent2);
+      letter-spacing: .15em;
+    }
+    .code-block code {
+      font-family: var(--font-code);
+      font-size: .82rem;
+      color: #a8d8ea;
+      line-height: 1.8;
+      white-space: pre;
+    }
+    .code-block code .tag  { color: #00f0ff; }
+    .code-block code .attr { color: #ff9f43; }
+    .code-block code .val  { color: #ff2a6d; }
+    .code-block code .cmt  { color: #3a6070; }
+
+    /* ═══ INFO BOX ═══ */
+    .info-box {
+      border: 1px solid var(--accent3);
+      border-left: 3px solid var(--accent3);
+      background: rgba(123,47,255,.05);
+      padding: 1rem 1.4rem;
+      margin: 1.2rem 0;
+    }
+    .info-box .label {
+      font-family: var(--font-head);
+      font-size: .6rem;
+      letter-spacing: .2em;
+      color: var(--accent3);
+      margin-bottom: .4rem;
+    }
+
+    /* ═══ GRID ═══ */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ═══ TABLE ═══ */
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .85rem; }
+    th {
+      font-family: var(--font-head);
+      font-size: .65rem;
+      letter-spacing: .12em;
+      color: var(--bg);
+      background: var(--accent);
+      padding: .6rem 1rem;
+      text-align: left;
+    }
+    td { padding: .6rem 1rem; border-bottom: 1px solid #0d2a3a; color: var(--text); font-family: var(--font-code); font-size: .8rem; }
+    tr:hover td { background: rgba(0,240,255,.04); }
+
+    /* ═══ STEPS ═══ */
+    .steps { counter-reset: step; }
+    .step { display: flex; gap: 1.2rem; margin-bottom: 1.5rem; align-items: flex-start; }
+    .step::before {
+      counter-increment: step;
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--font-head);
+      font-size: .7rem;
+      color: var(--accent2);
+      border: 1px solid var(--accent2);
+      padding: .3rem .5rem;
+      min-width: 42px;
+      text-align: center;
+      margin-top: .1rem;
+      flex-shrink: 0;
+    }
+    .step-body strong {
+      font-family: var(--font-head);
+      font-size: .8rem;
+      color: var(--accent);
+      display: block;
+      margin-bottom: .4rem;
+      letter-spacing: .08em;
+    }
+
+    /* ═══ PROGRESS ═══ */
+    .progress-list { list-style: none; padding: 0; }
+    .progress-item { margin-bottom: 1rem; }
+    .prog-label { display: flex; justify-content: space-between; font-family: var(--font-code); font-size: .72rem; color: var(--text-dim); margin-bottom: .3rem; }
+    .progress-bar { height: 6px; background: #0a1a26; border: 1px solid #0d2a3a; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent3)); box-shadow: 0 0 8px var(--accent); animation: fill-bar 1.5s ease both; }
+    @keyframes fill-bar { from { width: 0; } }
+
+    /* ═══ OBJECTIVE CARD ═══ */
+    .objective-card {
+      background: linear-gradient(135deg, #0a1a2e, #0b1826);
+      border: 1px solid var(--accent);
+      box-shadow: var(--glow), inset 0 0 40px rgba(0,240,255,.03);
+      padding: 2.5rem;
+      margin-top: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .objective-card::after {
+      content: '</>';
+      position: absolute;
+      bottom: 1rem; right: 2rem;
+      font-family: var(--font-head);
+      font-size: 5rem;
+      color: rgba(0,240,255,.04);
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .objective-card h3 {
+      font-family: var(--font-head);
+      font-size: 1rem;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      letter-spacing: .12em;
+      margin-bottom: 1.2rem;
+    }
+
+    /* ═══ BROWSER PREVIEW ═══ */
+    .preview-box { border: 1px solid #1a3a50; background: #fff; border-radius: 4px; overflow: hidden; margin-top: 1.5rem; }
+    .preview-bar { background: #e8e8e8; display: flex; align-items: center; gap: .4rem; padding: .5rem .8rem; }
+    .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .preview-content { padding: 1rem; font-family: serif; font-size: .85rem; color: #222; background: #fff; }
+    .preview-content h1 { font-size: 1.4rem; margin-bottom: .3rem; }
+    .preview-content header { border-bottom: 2px solid #333; padding-bottom: .4rem; margin-bottom: .6rem; }
+    .preview-content .pnav { background: #333; padding: .4rem .6rem; margin-top: .4rem; }
+    .preview-content .pnav a { color: #fff; text-decoration: none; margin-right: .8rem; font-family: sans-serif; font-size: .72rem; }
+    .preview-content .pbody { display: flex; gap: 1rem; }
+    .preview-content article { flex: 1; }
+    .preview-content aside { width: 110px; background: #f4f4f4; padding: .5rem; font-size: .7rem; font-family: sans-serif; border-left: 1px solid #ddd; }
+    .preview-content footer { background: #333; color: #fff; text-align: center; padding: .3rem; font-family: sans-serif; font-size: .68rem; margin-top: .6rem; }
+    .preview-content p { color: #444; font-size: .78rem; margin-bottom: .35rem; }
+    .preview-content h2 { font-size: .95rem; margin-bottom: .3rem; }
+    .preview-content h3 { font-size: .8rem; margin-bottom: .25rem; }
+
+    /* ═══ ANIMATIONS ═══ */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══ FOOTER ═══ */
+    footer.site-footer {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      border-top: var(--border);
+      font-family: var(--font-code);
+      font-size: .7rem;
+      color: var(--text-dim);
+      letter-spacing: .15em;
+    }
+    footer.site-footer span { color: var(--accent); }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; height: auto; border-right: none; border-bottom: var(--border); }
+      .main { padding: 2rem 1.5rem 4rem; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOPNAV ═══ -->
+<nav class="topnav">
+  <a href="index.html" class="btn-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+    PORTAFOLIO
+  </a>
+  <span class="nav-brand">HTML5 · GUÍA COMPLETA</span>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring"></div>
+
+  <div class="hero-badge">CURSO COMPLETO · NIVEL 0 ▶ DISEÑO</div>
+  <h1 class="hero-title">GUÍA DE <span class="hl">HTML</span><span class="hl2">5</span></h1>
+  <p class="hero-sub">Aprende el lenguaje base de la web desde cero</p>
+
+  <div class="hero-cta">
+    <a href="#seccion-1" class="btn-primary">INICIAR GUÍA</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">10</div><div class="lbl">MÓDULOS</div></div>
+    <div class="hero-stat"><div class="num">0</div><div class="lbl">REQUISITOS</div></div>
+    <div class="hero-stat"><div class="num">1</div><div class="lbl">PROYECTO FINAL</div></div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>DESPLÁZATE</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══ CONTENT ═══ -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">ÍNDICE DE CONTENIDO</div>
+    <nav class="sidebar-nav">
+      <a href="#seccion-1"><span class="idx">01</span>¿Qué es HTML5?</a>
+      <a href="#seccion-2"><span class="idx">02</span>Configuración del entorno</a>
+      <a href="#seccion-3"><span class="idx">03</span>Estructura base</a>
+      <a href="#seccion-4"><span class="idx">04</span>Etiquetas esenciales</a>
+      <a href="#seccion-5"><span class="idx">05</span>Semántica HTML5</a>
+      <a href="#seccion-6"><span class="idx">06</span>Listas y tablas</a>
+      <a href="#seccion-7"><span class="idx">07</span>Formularios</a>
+      <a href="#seccion-8"><span class="idx">08</span>Multimedia</a>
+      <a href="#seccion-9"><span class="idx">09</span>Buenas prácticas</a>
+      <a href="#seccion-10"><span class="idx">10</span>Proyecto final</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ─── 01 ─── -->
+    <section class="section" id="seccion-1">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">¿Qué es HTML5?</h2>
+      </div>
+      <div class="card">
+        <h3>DEFINICIÓN</h3>
+        <p><strong>HTML</strong> (HyperText Markup Language) es el lenguaje estándar para crear páginas web. Es el <em>esqueleto</em> de cualquier sitio: define la estructura y el significado del contenido. <strong>HTML5</strong> es su versión más moderna, lanzada en 2014 y mantenida por el W3C.</p>
+        <p>No es un lenguaje de programación: no tiene lógica ni condiciones. Es un <strong>lenguaje de marcado</strong> que usa etiquetas (<em>tags</em>) para describir el contenido.</p>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>¿QUÉ HACE HTML?</h3>
+          <ul>
+            <li>Define títulos, párrafos e imágenes</li>
+            <li>Estructura la información en secciones</li>
+            <li>Crea formularios y botones</li>
+            <li>Enlaza páginas entre sí</li>
+            <li>Incrusta video y audio</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>¿QUÉ NO HACE HTML?</h3>
+          <ul>
+            <li>No da estilo (eso es <strong>CSS</strong>)</li>
+            <li>No añade interactividad (eso es <strong>JS</strong>)</li>
+            <li>No guarda datos en un servidor</li>
+            <li>No tiene bucles ni variables</li>
+          </ul>
+        </div>
+      </div>
+      <div class="info-box">
+        <div class="label">💡 TIP</div>
+        <p style="margin:0">La web se construye con 3 capas: <strong style="color:var(--accent)">HTML</strong> (estructura) + <strong style="color:var(--accent2)">CSS</strong> (estilo) + <strong style="color:var(--accent3)">JavaScript</strong> (comportamiento). Esta guía cubre la primera capa.</p>
+      </div>
+    </section>
+
+    <!-- ─── 02 ─── -->
+    <section class="section" id="seccion-2">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Configuración del entorno</h2>
+      </div>
+      <div class="card">
+        <h3>HERRAMIENTAS NECESARIAS</h3>
+        <p>Para escribir HTML solo necesitas dos cosas:</p>
+        <ol>
+          <li><strong>Editor de código</strong> — Recomendado: <code style="color:var(--accent);font-family:var(--font-code)">VS Code</code> (gratuito)</li>
+          <li><strong>Navegador web</strong> — Chrome, Firefox, Edge o Safari</li>
+        </ol>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-body"><strong>INSTALAR VS CODE</strong>Descarga VS Code desde <code style="color:var(--accent);font-family:var(--font-code)">code.visualstudio.com</code> e instálalo. Es el editor más popular entre desarrolladores web.</div></div>
+        <div class="step"><div class="step-body"><strong>CREAR CARPETA DE PROYECTO</strong>Crea una carpeta llamada <code style="color:var(--accent);font-family:var(--font-code)">mi-sitio-web</code> en tu escritorio. Ahí irán todos tus archivos.</div></div>
+        <div class="step"><div class="step-body"><strong>CREAR EL PRIMER ARCHIVO</strong>Dentro de la carpeta, crea un archivo llamado <code style="color:var(--accent);font-family:var(--font-code)">index.html</code>. El nombre <em>index</em> es especial: es la página principal.</div></div>
+        <div class="step"><div class="step-body"><strong>INSTALAR LIVE SERVER</strong>En VS Code busca la extensión <em>Live Server</em>. Te permite ver tu página en el navegador y que se actualice automáticamente al guardar.</div></div>
+      </div>
+    </section>
+
+    <!-- ─── 03 ─── -->
+    <section class="section" id="seccion-3">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Estructura base de un documento HTML</h2>
+      </div>
+      <div class="card">
+        <h3>EL ESQUELETO MÍNIMO</h3>
+        <p>Todo archivo HTML debe comenzar con esta estructura. VS Code la genera al escribir <code style="color:var(--accent);font-family:var(--font-code)">!</code> y presionar Tab:</p>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"es"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Mi primera página<span class="tag">&lt;/title&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+
+  <span class="tag">&lt;body&gt;</span>
+    <span class="cmt">&lt;!-- Aquí va el contenido visible --&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>¡Hola, mundo!<span class="tag">&lt;/h1&gt;</span>
+  <span class="tag">&lt;/body&gt;</span>
+
+<span class="tag">&lt;/html&gt;</span></code>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>PARTES DEL DOCUMENTO</h3>
+          <table>
+            <tr><th>Etiqueta</th><th>Función</th></tr>
+            <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td>Declara HTML5</td></tr>
+            <tr><td><code>&lt;html&gt;</code></td><td>Raíz de la página</td></tr>
+            <tr><td><code>&lt;head&gt;</code></td><td>Metadatos (no visibles)</td></tr>
+            <tr><td><code>&lt;body&gt;</code></td><td>Contenido visible</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>ANATOMÍA DE UNA ETIQUETA</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="cmt">&lt;!-- Etiqueta con apertura y cierre --&gt;</span>
+<span class="tag">&lt;p&gt;</span>Texto del párrafo<span class="tag">&lt;/p&gt;</span>
+
+<span class="cmt">&lt;!-- Etiqueta auto-cerrada --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"foto.jpg"</span> <span class="attr">alt</span>=<span class="val">"mi foto"</span><span class="tag">&gt;</span></code>
+          </div>
+        </div>
+      </div>
+      <div class="info-box">
+        <div class="label">📌 REGLA IMPORTANTE</div>
+        <p style="margin:0">Las etiquetas que abren deben cerrarse: <code style="color:var(--accent);font-family:var(--font-code)">&lt;p&gt;</code> → <code style="color:var(--accent2);font-family:var(--font-code)">&lt;/p&gt;</code>. El slash <code style="color:var(--accent2);font-family:var(--font-code)">/</code> indica cierre. Algunas se cierran solas: <code style="color:var(--accent);font-family:var(--font-code)">&lt;br&gt;</code>, <code style="color:var(--accent);font-family:var(--font-code)">&lt;img&gt;</code>, <code style="color:var(--accent);font-family:var(--font-code)">&lt;meta&gt;</code>.</p>
+      </div>
+    </section>
+
+    <!-- ─── 04 ─── -->
+    <section class="section" id="seccion-4">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Etiquetas esenciales</h2>
+      </div>
+      <div class="card">
+        <h3>ENCABEZADOS (HEADINGS)</h3>
+        <p>HTML tiene 6 niveles. <code style="color:var(--accent);font-family:var(--font-code)">&lt;h1&gt;</code> es el más importante (solo uno por página) y <code style="color:var(--accent);font-family:var(--font-code)">&lt;h6&gt;</code> el de menor jerarquía.</p>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;h1&gt;</span>Título principal de la página<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;h2&gt;</span>Sección importante<span class="tag">&lt;/h2&gt;</span>
+<span class="tag">&lt;h3&gt;</span>Sub-sección<span class="tag">&lt;/h3&gt;</span>
+<span class="tag">&lt;h4&gt;</span>Sub-sub-sección<span class="tag">&lt;/h4&gt;</span></code>
+        </div>
+      </div>
+      <div class="card">
+        <h3>PÁRRAFOS Y TEXTO</h3>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;p&gt;</span>Este es un párrafo de texto normal.<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;p&gt;</span>
+  Texto con <span class="tag">&lt;strong&gt;</span>negritas<span class="tag">&lt;/strong&gt;</span>,
+  <span class="tag">&lt;em&gt;</span>cursivas<span class="tag">&lt;/em&gt;</span> y
+  <span class="tag">&lt;mark&gt;</span>marcado<span class="tag">&lt;/mark&gt;</span>.
+<span class="tag">&lt;/p&gt;</span>
+
+<span class="tag">&lt;br&gt;</span> <span class="cmt">&lt;!-- Salto de línea --&gt;</span>
+<span class="tag">&lt;hr&gt;</span> <span class="cmt">&lt;!-- Línea horizontal --&gt;</span></code>
+        </div>
+      </div>
+      <div class="card">
+        <h3>ENLACES E IMÁGENES</h3>
+        <div class="code-block" data-lang="HTML">
+<code><span class="cmt">&lt;!-- Enlace externo --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"https://ejemplo.com"</span> <span class="attr">target</span>=<span class="val">"_blank"</span><span class="tag">&gt;</span>
+  Visitar sitio
+<span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Ancla: enlace a sección de la misma página --&gt;</span>
+<span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#contacto"</span><span class="tag">&gt;</span>Ir a contacto<span class="tag">&lt;/a&gt;</span>
+
+<span class="cmt">&lt;!-- Imagen --&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"foto.jpg"</span>
+     <span class="attr">alt</span>=<span class="val">"Descripción de la imagen"</span>
+     <span class="attr">width</span>=<span class="val">"300"</span><span class="tag">&gt;</span></code>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>ATRIBUTOS CLAVE</h3>
+          <table>
+            <tr><th>Atributo</th><th>Uso</th></tr>
+            <tr><td><code>id</code></td><td>Identificador único</td></tr>
+            <tr><td><code>class</code></td><td>Grupo (para CSS/JS)</td></tr>
+            <tr><td><code>href</code></td><td>URL de un enlace</td></tr>
+            <tr><td><code>src</code></td><td>Ruta de imagen/video</td></tr>
+            <tr><td><code>alt</code></td><td>Texto alternativo</td></tr>
+            <tr><td><code>target</code></td><td>Dónde abrir el enlace</td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <h3>CONTENEDORES GENÉRICOS</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="cmt">&lt;!-- Bloque (ocupa toda la línea) --&gt;</span>
+<span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="val">"tarjeta"</span><span class="tag">&gt;</span>
+  Contenido aquí
+<span class="tag">&lt;/div&gt;</span>
+
+<span class="cmt">&lt;!-- En línea (dentro del texto) --&gt;</span>
+<span class="tag">&lt;span</span> <span class="attr">class</span>=<span class="val">"destacado"</span><span class="tag">&gt;</span>palabra<span class="tag">&lt;/span&gt;</span></code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 05 ─── -->
+    <section class="section" id="seccion-5">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Semántica HTML5</h2>
+      </div>
+      <div class="card">
+        <h3>¿QUÉ ES LA SEMÁNTICA?</h3>
+        <p>HTML5 introdujo etiquetas que <strong>describen el significado</strong> del contenido, no solo su apariencia. Esto mejora la accesibilidad y el SEO. En lugar de usar solo <code style="color:var(--accent);font-family:var(--font-code)">&lt;div&gt;</code> para todo, HTML5 nos da etiquetas específicas:</p>
+      </div>
+      <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;body&gt;</span>
+  <span class="tag">&lt;header&gt;</span>
+    <span class="cmt">&lt;!-- Logo, nombre del sitio, navegación principal --&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#inicio"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#servicios"</span><span class="tag">&gt;</span>Servicios<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="tag">&lt;main&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"inicio"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;article&gt;</span>
+        <span class="tag">&lt;h2&gt;</span>Artículo de blog<span class="tag">&lt;/h2&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Contenido del artículo...<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/article&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+    <span class="tag">&lt;aside&gt;</span><span class="cmt">&lt;!-- Sidebar, widgets --&gt;</span><span class="tag">&lt;/aside&gt;</span>
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span>&amp;copy; 2025 Mi Sitio<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+<span class="tag">&lt;/body&gt;</span></code>
+      </div>
+      <div class="card">
+        <h3>MAPA DE ETIQUETAS SEMÁNTICAS</h3>
+        <table>
+          <tr><th>Etiqueta</th><th>Significado</th><th>Cuándo usarla</th></tr>
+          <tr><td><code>&lt;header&gt;</code></td><td>Cabecera</td><td>Logo, menú, nombre del sitio</td></tr>
+          <tr><td><code>&lt;nav&gt;</code></td><td>Navegación</td><td>Menú de enlaces</td></tr>
+          <tr><td><code>&lt;main&gt;</code></td><td>Contenido principal</td><td>Una sola vez por página</td></tr>
+          <tr><td><code>&lt;section&gt;</code></td><td>Sección temática</td><td>Grupo de contenido relacionado</td></tr>
+          <tr><td><code>&lt;article&gt;</code></td><td>Artículo</td><td>Post, noticia, tarjeta</td></tr>
+          <tr><td><code>&lt;aside&gt;</code></td><td>Contenido secundario</td><td>Sidebar, widget, anuncio</td></tr>
+          <tr><td><code>&lt;footer&gt;</code></td><td>Pie de página</td><td>Créditos, copyright, enlaces</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── 06 ─── -->
+    <section class="section" id="seccion-6">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Listas y tablas</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>LISTA NO ORDENADA</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>HTML<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>CSS<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>JavaScript<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span></code>
+          </div>
+          <p>Genera • viñetas</p>
+        </div>
+        <div class="card">
+          <h3>LISTA ORDENADA</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;ol&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Aprender HTML<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Aprender CSS<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>Aprender JS<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ol&gt;</span></code>
+          </div>
+          <p>Genera 1, 2, 3 numerados</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>TABLAS</h3>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;table&gt;</span>
+  <span class="tag">&lt;thead&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;th&gt;</span>Nombre<span class="tag">&lt;/th&gt;</span> <span class="tag">&lt;th&gt;</span>Edad<span class="tag">&lt;/th&gt;</span> <span class="tag">&lt;th&gt;</span>Ciudad<span class="tag">&lt;/th&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/thead&gt;</span>
+  <span class="tag">&lt;tbody&gt;</span>
+    <span class="tag">&lt;tr&gt;</span>
+      <span class="tag">&lt;td&gt;</span>Ana<span class="tag">&lt;/td&gt;</span> <span class="tag">&lt;td&gt;</span>25<span class="tag">&lt;/td&gt;</span> <span class="tag">&lt;td&gt;</span>México<span class="tag">&lt;/td&gt;</span>
+    <span class="tag">&lt;/tr&gt;</span>
+  <span class="tag">&lt;/tbody&gt;</span>
+<span class="tag">&lt;/table&gt;</span></code>
+        </div>
+        <div class="info-box">
+          <div class="label">📌 ESTRUCTURA</div>
+          <p style="margin:0"><code style="color:var(--accent);font-family:var(--font-code)">&lt;table&gt;</code> → tabla | <code style="color:var(--accent);font-family:var(--font-code)">&lt;tr&gt;</code> → fila | <code style="color:var(--accent);font-family:var(--font-code)">&lt;th&gt;</code> → encabezado | <code style="color:var(--accent);font-family:var(--font-code)">&lt;td&gt;</code> → celda</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 07 ─── -->
+    <section class="section" id="seccion-7">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Formularios</h2>
+      </div>
+      <div class="card">
+        <h3>FORMULARIO BÁSICO</h3>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">"enviar.php"</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"nombre"</span><span class="tag">&gt;</span>Nombre:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"nombre"</span>
+         <span class="attr">name</span>=<span class="val">"nombre"</span> <span class="attr">placeholder</span>=<span class="val">"Tu nombre"</span>
+         <span class="attr">required</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"email"</span><span class="tag">&gt;</span>Correo:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span><span class="tag">&gt;</span>
+
+  <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"msg"</span><span class="tag">&gt;</span>Mensaje:<span class="tag">&lt;/label&gt;</span>
+  <span class="tag">&lt;textarea</span> <span class="attr">id</span>=<span class="val">"msg"</span> <span class="attr">name</span>=<span class="val">"msg"</span> <span class="attr">rows</span>=<span class="val">"5"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+  <span class="tag">&lt;select</span> <span class="attr">name</span>=<span class="val">"pais"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"mx"</span><span class="tag">&gt;</span>México<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attr">value</span>=<span class="val">"ar"</span><span class="tag">&gt;</span>Argentina<span class="tag">&lt;/option&gt;</span>
+  <span class="tag">&lt;/select&gt;</span>
+
+  <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>Enviar<span class="tag">&lt;/button&gt;</span>
+
+<span class="tag">&lt;/form&gt;</span></code>
+        </div>
+      </div>
+      <div class="card">
+        <h3>TIPOS DE INPUT MÁS USADOS</h3>
+        <table>
+          <tr><th>type=</th><th>Descripción</th></tr>
+          <tr><td><code>"text"</code></td><td>Texto simple</td></tr>
+          <tr><td><code>"email"</code></td><td>Valida formato email</td></tr>
+          <tr><td><code>"password"</code></td><td>Oculta caracteres</td></tr>
+          <tr><td><code>"number"</code></td><td>Solo números</td></tr>
+          <tr><td><code>"date"</code></td><td>Selector de fecha</td></tr>
+          <tr><td><code>"checkbox"</code></td><td>Casilla de verificación</td></tr>
+          <tr><td><code>"radio"</code></td><td>Opción única del grupo</td></tr>
+          <tr><td><code>"file"</code></td><td>Subir archivos</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ─── 08 ─── -->
+    <section class="section" id="seccion-8">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-title">Multimedia</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>VIDEO</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;video</span>
+  <span class="attr">src</span>=<span class="val">"video.mp4"</span>
+  <span class="attr">controls</span>
+  <span class="attr">width</span>=<span class="val">"100%"</span>
+  <span class="attr">poster</span>=<span class="val">"thumbnail.jpg"</span><span class="tag">&gt;</span>
+  Tu navegador no soporta video.
+<span class="tag">&lt;/video&gt;</span></code>
+          </div>
+          <ul style="margin-top:.8rem">
+            <li><code style="font-family:var(--font-code);color:var(--accent)">controls</code> → muestra controles</li>
+            <li><code style="font-family:var(--font-code);color:var(--accent)">autoplay</code> → reproduce solo</li>
+            <li><code style="font-family:var(--font-code);color:var(--accent)">loop</code> → repite en bucle</li>
+            <li><code style="font-family:var(--font-code);color:var(--accent)">muted</code> → sin sonido</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>AUDIO e IFRAME</h3>
+          <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;audio</span> <span class="attr">controls</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;source</span> <span class="attr">src</span>=<span class="val">"music.mp3"</span>
+          <span class="attr">type</span>=<span class="val">"audio/mpeg"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/audio&gt;</span>
+
+<span class="cmt">&lt;!-- Video de YouTube --&gt;</span>
+<span class="tag">&lt;iframe</span>
+  <span class="attr">src</span>=<span class="val">"https://www.youtube.com/embed/ID"</span>
+  <span class="attr">width</span>=<span class="val">"560"</span> <span class="attr">height</span>=<span class="val">"315"</span>
+  <span class="attr">allowfullscreen</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/iframe&gt;</span></code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 09 ─── -->
+    <section class="section" id="seccion-9">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-title">Buenas prácticas</h2>
+      </div>
+      <div class="card">
+        <h3>REGLAS DE ORO</h3>
+        <ul class="progress-list">
+          <li class="progress-item">
+            <div class="prog-label"><span>Siempre usa el atributo alt en imágenes</span><span>Accesibilidad</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          </li>
+          <li class="progress-item">
+            <div class="prog-label"><span>Un solo &lt;h1&gt; por página</span><span>SEO</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+          </li>
+          <li class="progress-item">
+            <div class="prog-label"><span>Usa etiquetas semánticas, no solo &lt;div&gt;</span><span>Semántica</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:90%"></div></div>
+          </li>
+          <li class="progress-item">
+            <div class="prog-label"><span>Indenta correctamente el código</span><span>Legibilidad</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
+          </li>
+          <li class="progress-item">
+            <div class="prog-label"><span>Valida tu HTML en validator.w3.org</span><span>Calidad</span></div>
+            <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+          </li>
+        </ul>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>✅ HACER</h3>
+          <ul>
+            <li>Escribir HTML en minúsculas</li>
+            <li>Cerrar todas las etiquetas</li>
+            <li>Usar nombres descriptivos para ids/clases</li>
+            <li>Comentar secciones importantes</li>
+            <li>Mantener el código organizado e indentado</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>❌ EVITAR</h3>
+          <ul>
+            <li>Usar estilos inline en exceso</li>
+            <li>Usar tablas para maquetar</li>
+            <li>Saltarse niveles de encabezado</li>
+            <li>Etiquetas obsoletas como <code style="font-family:var(--font-code);color:var(--accent2)">&lt;font&gt;</code></li>
+            <li>Imágenes sin atributo <code style="font-family:var(--font-code);color:var(--accent2)">alt</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── 10 · PROYECTO FINAL ─── -->
+    <section class="section" id="seccion-10">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-title">Proyecto Final · Diseño básico completo</h2>
+      </div>
+
+      <div class="objective-card">
+        <h3>🎯 OBJETIVO: TU PRIMERA PÁGINA WEB COMPLETA</h3>
+        <p>Aplicando todo lo aprendido, construirás una página web personal con: encabezado con navegación, sección de bienvenida, sección de servicios, tabla de habilidades, formulario de contacto y pie de página.</p>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem">
+        <h3>CÓDIGO COMPLETO DEL PROYECTO</h3>
+        <div class="code-block" data-lang="HTML">
+<code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="val">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="val">"UTF-8"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"viewport"</span> <span class="attr">content</span>=<span class="val">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="val">"description"</span> <span class="attr">content</span>=<span class="val">"index.html"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Ana García · Portafolio<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+
+<span class="tag">&lt;body&gt;</span>
+
+  <span class="cmt">&lt;!-- ===== ENCABEZADO ===== --&gt;</span>
+  <span class="tag">&lt;header&gt;</span>
+    <span class="tag">&lt;h1&gt;</span>Ana García<span class="tag">&lt;/h1&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Diseñadora Web · Desarrolladora Frontend<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#inicio"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#servicios"</span><span class="tag">&gt;</span>Servicios<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#habilidades"</span><span class="tag">&gt;</span>Habilidades<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#contacto"</span><span class="tag">&gt;</span>Contacto<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/header&gt;</span>
+
+  <span class="cmt">&lt;!-- ===== CONTENIDO PRINCIPAL ===== --&gt;</span>
+  <span class="tag">&lt;main&gt;</span>
+
+    <span class="cmt">&lt;!-- Bienvenida --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"inicio"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>¡Hola! Soy Ana<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;p&gt;</span>Apasionada por crear experiencias web únicas y accesibles.<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"foto-perfil.jpg"</span> <span class="attr">alt</span>=<span class="val">"Foto de Ana García"</span> <span class="attr">width</span>=<span class="val">"200"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#contacto"</span><span class="tag">&gt;</span>Contáctame<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cmt">&lt;!-- Servicios --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"servicios"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Mis Servicios<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;ul&gt;</span>
+        <span class="tag">&lt;li&gt;</span>Diseño de páginas web responsivas<span class="tag">&lt;/li&gt;</span>
+        <span class="tag">&lt;li&gt;</span>Desarrollo con HTML5 y CSS3<span class="tag">&lt;/li&gt;</span>
+        <span class="tag">&lt;li&gt;</span>Optimización SEO<span class="tag">&lt;/li&gt;</span>
+        <span class="tag">&lt;li&gt;</span>Accesibilidad web (WCAG 2.1)<span class="tag">&lt;/li&gt;</span>
+      <span class="tag">&lt;/ul&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cmt">&lt;!-- Habilidades --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"habilidades"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Habilidades<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;table&gt;</span>
+        <span class="tag">&lt;thead&gt;</span>
+          <span class="tag">&lt;tr&gt;</span>
+            <span class="tag">&lt;th&gt;</span>Tecnología<span class="tag">&lt;/th&gt;</span>
+            <span class="tag">&lt;th&gt;</span>Nivel<span class="tag">&lt;/th&gt;</span>
+            <span class="tag">&lt;th&gt;</span>Años<span class="tag">&lt;/th&gt;</span>
+          <span class="tag">&lt;/tr&gt;</span>
+        <span class="tag">&lt;/thead&gt;</span>
+        <span class="tag">&lt;tbody&gt;</span>
+          <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>HTML5<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>Avanzado<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>3<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+          <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>CSS3<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>Avanzado<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>3<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+          <span class="tag">&lt;tr&gt;</span><span class="tag">&lt;td&gt;</span>JavaScript<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>Intermedio<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;td&gt;</span>2<span class="tag">&lt;/td&gt;</span><span class="tag">&lt;/tr&gt;</span>
+        <span class="tag">&lt;/tbody&gt;</span>
+      <span class="tag">&lt;/table&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+    <span class="cmt">&lt;!-- Contacto --&gt;</span>
+    <span class="tag">&lt;section</span> <span class="attr">id</span>=<span class="val">"contacto"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;h2&gt;</span>Contacto<span class="tag">&lt;/h2&gt;</span>
+      <span class="tag">&lt;form</span> <span class="attr">action</span>=<span class="val">"#"</span> <span class="attr">method</span>=<span class="val">"post"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"nombre"</span><span class="tag">&gt;</span>Nombre:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"text"</span> <span class="attr">id</span>=<span class="val">"nombre"</span> <span class="attr">name</span>=<span class="val">"nombre"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+        <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"email"</span><span class="tag">&gt;</span>Correo:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="val">"email"</span> <span class="attr">id</span>=<span class="val">"email"</span> <span class="attr">name</span>=<span class="val">"email"</span> <span class="attr">required</span><span class="tag">&gt;</span>
+
+        <span class="tag">&lt;label</span> <span class="attr">for</span>=<span class="val">"mensaje"</span><span class="tag">&gt;</span>Mensaje:<span class="tag">&lt;/label&gt;</span>
+        <span class="tag">&lt;textarea</span> <span class="attr">id</span>=<span class="val">"mensaje"</span> <span class="attr">name</span>=<span class="val">"mensaje"</span> <span class="attr">rows</span>=<span class="val">"5"</span><span class="tag">&gt;&lt;/textarea&gt;</span>
+
+        <span class="tag">&lt;button</span> <span class="attr">type</span>=<span class="val">"submit"</span><span class="tag">&gt;</span>Enviar mensaje<span class="tag">&lt;/button&gt;</span>
+      <span class="tag">&lt;/form&gt;</span>
+    <span class="tag">&lt;/section&gt;</span>
+
+  <span class="tag">&lt;/main&gt;</span>
+
+  <span class="cmt">&lt;!-- ===== PIE DE PÁGINA ===== --&gt;</span>
+  <span class="tag">&lt;footer&gt;</span>
+    <span class="tag">&lt;p&gt;</span>&amp;copy; 2025 Ana García. Todos los derechos reservados.<span class="tag">&lt;/p&gt;</span>
+    <span class="tag">&lt;nav&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"#inicio"</span><span class="tag">&gt;</span>Inicio<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attr">href</span>=<span class="val">"mailto:ana@ejemplo.com"</span><span class="tag">&gt;</span>Email<span class="tag">&lt;/a&gt;</span>
+    <span class="tag">&lt;/nav&gt;</span>
+  <span class="tag">&lt;/footer&gt;</span>
+
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code>
+        </div>
+      </div>
+
+      <!-- BROWSER PREVIEW -->
+      <div class="card">
+        <h3>VISTA PREVIA DEL RESULTADO</h3>
+        <p>Así luce la estructura semántica (sin CSS — la apariencia viene con el próximo paso):</p>
+        <div class="preview-box">
+          <div class="preview-bar">
+            <div class="preview-dot" style="background:#ff5f57"></div>
+            <div class="preview-dot" style="background:#febc2e"></div>
+            <div class="preview-dot" style="background:#28c840"></div>
+          </div>
+          <div class="preview-content">
+            <header>
+              <h1>Ana García</h1>
+              <p style="margin:0;font-size:.72rem;color:#555;font-family:sans-serif">Diseñadora Web · Desarrolladora Frontend</p>
+              <div class="pnav">
+                <a href="#">Inicio</a>
+                <a href="#">Servicios</a>
+                <a href="#">Habilidades</a>
+                <a href="#">Contacto</a>
+              </div>
+            </header>
+            <div class="pbody">
+              <article>
+                <h2>¡Hola! Soy Ana</h2>
+                <p>Apasionada por crear experiencias web únicas y accesibles.</p>
+                <h3>Servicios</h3>
+                <p>• Diseño responsivo &nbsp; • HTML5/CSS3 &nbsp; • SEO &nbsp; • Accesibilidad</p>
+                <h3>Habilidades</h3>
+                <p>HTML5 (Avanzado) · CSS3 (Avanzado) · JavaScript (Intermedio)</p>
+                <h3>Contacto</h3>
+                <p>[Formulario: Nombre, Email, Mensaje, Botón Enviar]</p>
+              </article>
+              <aside>
+                <strong>Sidebar</strong>
+                <p>Contenido secundario o widgets adicionales aquí.</p>
+              </aside>
+            </div>
+            <footer>© 2025 Ana García · Todos los derechos reservados</footer>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT STEPS -->
+      <div class="card" style="border-top-color:var(--accent2)">
+        <h3>🚀 ¿Y AHORA QUÉ?</h3>
+        <p>Tu estructura HTML está lista. El siguiente paso natural es aprender <strong style="color:var(--accent)">CSS3</strong> para dar estilo, colores, tipografía y layout. Después, <strong style="color:var(--accent3)">JavaScript</strong> para añadir interactividad.</p>
+        <p>Recursos recomendados:</p>
+        <ul>
+          <li><strong>MDN Web Docs</strong> — developer.mozilla.org (referencia oficial)</li>
+          <li><strong>W3Schools</strong> — w3schools.com (tutoriales interactivos)</li>
+          <li><strong>The Odin Project</strong> — theodinproject.com (ruta gratuita)</li>
+          <li><strong>freeCodeCamp</strong> — freecodecamp.org (cursos con certificado)</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <span>GUÍA DE HTML5</span> · Aprende · Construye · Publica
+</footer>
+
+<script>
+  // Active sidebar link highlight on scroll
+  const sections = document.querySelectorAll('.section');
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const id = entry.target.getAttribute('id');
+        const active = document.querySelector(`.sidebar-nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { threshold: 0.25, rootMargin: '-60px 0px 0px 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
