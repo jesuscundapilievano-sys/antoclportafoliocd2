@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Componentes de Arduino</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-50: #E1F5EE;
+    --teal-100: #9FE1CB;
+    --teal-200: #5DCAA5;
+    --teal-400: #1D9E75;
+    --teal-600: #0F6E56;
+    --teal-800: #085041;
+    --amber-50: #FAEEDA;
+    --amber-100: #FAC775;
+    --amber-400: #EF9F27;
+    --amber-600: #BA7517;
+    --amber-800: #854F0B;
+    --coral-50: #FAECE7;
+    --coral-100: #F5C4B3;
+    --coral-400: #D85A30;
+    --coral-600: #993C1D;
+    --coral-800: #712B13;
+    --purple-50: #EEEDFE;
+    --purple-100: #CECBF6;
+    --purple-400: #7F77DD;
+    --purple-600: #534AB7;
+    --purple-800: #3C3489;
+    --blue-50: #E6F1FB;
+    --blue-100: #B5D4F4;
+    --blue-400: #378ADD;
+    --blue-600: #185FA5;
+    --blue-800: #0C447C;
+    --gray-50: #F1EFE8;
+    --gray-100: #D3D1C7;
+    --gray-400: #888780;
+    --gray-600: #5F5E5A;
+    --gray-800: #444441;
+    --bg: #0a0f0a;
+    --surface: #111a11;
+    --surface2: #162016;
+    --border: rgba(29,158,117,0.15);
+    --text: #e8f5ee;
+    --text-muted: #7db89a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid texture background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(29,158,117,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,158,117,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* HEADER */
+  header {
+    padding: 60px 40px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--teal-400);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  h1 {
+    font-size: clamp(42px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--text);
+  }
+
+  h1 span {
+    color: var(--teal-400);
+  }
+
+  .header-desc {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+
+  .header-badge {
+    background: var(--teal-800);
+    border: 1px solid var(--teal-600);
+    color: var(--teal-100);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* NAV PILLS */
+  .nav-bar {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-pill {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Space Mono', monospace;
+    text-decoration: none;
+    color: var(--text-muted);
+    background: transparent;
+    border-color: var(--border);
+  }
+
+  .nav-pill:hover, .nav-pill.active {
+    background: var(--teal-800);
+    border-color: var(--teal-600);
+    color: var(--teal-100);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+
+  /* CATEGORY SECTION */
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .section-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .section-count {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .section-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* COMPONENT GRID */
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+
+  /* COMPONENT CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card:hover {
+    background: var(--surface2);
+    border-color: rgba(29,158,117,0.3);
+  }
+
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .card-emoji {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+    line-height: 1;
+  }
+
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Tag color themes */
+  .tag-teal   { background: var(--teal-800);  color: var(--teal-100);   border: 1px solid var(--teal-600); }
+  .tag-amber  { background: var(--amber-800); color: var(--amber-100);  border: 1px solid var(--amber-600); }
+  .tag-coral  { background: var(--coral-800); color: var(--coral-100);  border: 1px solid var(--coral-600); }
+  .tag-purple { background: var(--purple-800);color: var(--purple-100); border: 1px solid var(--purple-600); }
+  .tag-blue   { background: var(--blue-800);  color: var(--blue-100);   border: 1px solid var(--blue-600); }
+  .tag-gray   { background: var(--gray-800);  color: var(--gray-100);   border: 1px solid var(--gray-600); }
+
+  /* Card accent colors */
+  .accent-teal   .card::before { background: var(--teal-400); }
+  .accent-amber  .card::before { background: var(--amber-400); }
+  .accent-coral  .card::before { background: var(--coral-400); }
+  .accent-purple .card::before { background: var(--purple-400); }
+  .accent-blue   .card::before { background: var(--blue-400); }
+
+  .accent-teal   .section-icon { background: var(--teal-800);   color: var(--teal-100); }
+  .accent-amber  .section-icon { background: var(--amber-800);  color: var(--amber-100); }
+  .accent-coral  .section-icon { background: var(--coral-800);  color: var(--coral-100); }
+  .accent-purple .section-icon { background: var(--purple-800); color: var(--purple-100); }
+  .accent-blue   .section-icon { background: var(--blue-800);   color: var(--blue-100); }
+
+  .accent-teal   .section-title { color: var(--teal-200); }
+  .accent-amber  .section-title { color: var(--amber-100); }
+  .accent-coral  .section-title { color: var(--coral-100); }
+  .accent-purple .section-title { color: var(--purple-100); }
+  .accent-blue   .section-title { color: var(--blue-100); }
+
+  /* VOLTAGE SPEC TABLE inside featured card */
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .spec-row:last-child { border-bottom: none; }
+  .spec-val { color: var(--teal-200); }
+
+  /* FOOTER */
+  footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--teal-400);
+    text-decoration: none;
+  }
+
+  /* SEARCH BAR */
+  .search-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 40px 0;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    padding: 10px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input::placeholder { color: var(--text-muted); }
+  .search-input:focus { border-color: var(--teal-600); }
+
+  @media (max-width: 600px) {
+    header { padding: 40px 20px 32px; grid-template-columns: 1fr; }
+    .nav-bar, main, .search-wrap, footer { padding-left: 20px; padding-right: 20px; }
+    h1 { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="content">
+
+<header>
+  <div>
+    <span class="header-tag">// guía de referencia — hardware</span>
+    <h1>Componentes<br>de <span>Arduino</span></h1>
+    <p class="header-desc">Sensores, módulos, actuadores y hardware compatible para proyectos electrónicos con Arduino.</p>
+  </div>
+  <div class="header-badge">v1.0 — 2024</div>
+</header>
+
+<div class="search-wrap">
+  <input class="search-input" type="text" placeholder="// buscar componente..." id="searchInput" oninput="filterCards()">
+</div>
+
+<div class="nav-bar">
+  <a href="#sensores" class="nav-pill">Sensores</a>
+  <a href="#comunicacion" class="nav-pill">Comunicación</a>
+  <a href="#actuadores" class="nav-pill">Actuadores</a>
+  <a href="#pantallas" class="nav-pill">Pantallas</a>
+  <a href="#almacenamiento" class="nav-pill">Almacenamiento</a>
+  <a href="#fuente" class="nav-pill">Alimentación</a>
+  <a href="#placas" class="nav-pill">Placas</a>
+</div>
+
+<main>
+
+  <!-- SENSORES -->
+  <section class="section accent-teal" id="sensores">
+    <div class="section-header">
+      <div class="section-icon">⚡</div>
+      <h2 class="section-title">Sensores</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">14 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">🌡️</span>
+        <div class="card-name">DHT11 / DHT22</div>
+        <div class="card-desc">Sensor de temperatura y humedad relativa. El DHT22 ofrece mayor precisión (±0.5°C) y rango ampliado.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">temperatura</span>
+          <span class="tag tag-teal">humedad</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📏</span>
+        <div class="card-name">HC-SR04</div>
+        <div class="card-desc">Sensor ultrasónico de distancia. Rango 2cm–400cm mediante pulsos ultrasónicos de 40kHz.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">distancia</span>
+          <span class="tag tag-teal">ultrasonido</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">💡</span>
+        <div class="card-name">LDR / Fotoresistor</div>
+        <div class="card-desc">Resistencia variable según la intensidad lumínica. Se usa con divisor de voltaje para lectura analógica.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">luz</span>
+          <span class="tag tag-amber">analógico</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔥</span>
+        <div class="card-name">DS18B20</div>
+        <div class="card-desc">Sensor de temperatura digital de alta precisión con protocolo 1-Wire. Soporta múltiples sensores en un solo pin.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">temperatura</span>
+          <span class="tag tag-gray">1-Wire</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌿</span>
+        <div class="card-name">MQ-2 / MQ-135</div>
+        <div class="card-desc">Sensores de gas. MQ-2 detecta GLP y humo; MQ-135 detecta CO2, NH3, benceno y otros gases.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">gas</span>
+          <span class="tag tag-teal">calidad de aire</span>
+          <span class="tag tag-amber">analógico</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🏃</span>
+        <div class="card-name">PIR HC-SR501</div>
+        <div class="card-desc">Sensor de movimiento infrarrojo pasivo. Detecta cambios de calor corporal en un ángulo de 120° y hasta 7m.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">movimiento</span>
+          <span class="tag tag-teal">IR</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🧲</span>
+        <div class="card-name">Sensor Hall (A3144)</div>
+        <div class="card-desc">Detecta campos magnéticos. Muy usado para medir velocidad de rotación, detectar imanes y conteo de RPM.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">magnético</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">💧</span>
+        <div class="card-name">Sensor de lluvia / agua</div>
+        <div class="card-desc">Placa conductora que detecta presencia de agua. Salida analógica y digital. Usado en proyectos de riego.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">agua</span>
+          <span class="tag tag-amber">analógico</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌊</span>
+        <div class="card-name">Sensor de humedad de suelo</div>
+        <div class="card-desc">Mide la conductividad del suelo para determinar su nivel de humedad. Ideal para riego automático.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">suelo</span>
+          <span class="tag tag-teal">agronomía</span>
+          <span class="tag tag-amber">analógico</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🎵</span>
+        <div class="card-name">Sensor de sonido (KY-038)</div>
+        <div class="card-desc">Micrófono con amplificador integrado. Detecta nivel de ruido ambiente. Salida analógica y umbral digital.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">audio</span>
+          <span class="tag tag-amber">analógico</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔴</span>
+        <div class="card-name">Sensor infrarrojo (IR)</div>
+        <div class="card-desc">Emisor + receptor IR para detección de obstáculos o decodificación de mandos a distancia con TSOP.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">obstáculos</span>
+          <span class="tag tag-teal">IR</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">⚖️</span>
+        <div class="card-name">MPU-6050</div>
+        <div class="card-desc">IMU de 6 ejes: acelerómetro 3D + giroscopio 3D con interfaz I2C. Esencial para drones, robots y wearables.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">acelerómetro</span>
+          <span class="tag tag-teal">giroscopio</span>
+          <span class="tag tag-gray">I2C</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌐</span>
+        <div class="card-name">BMP280 / BME280</div>
+        <div class="card-desc">Sensor barométrico de presión y altitud. El BME280 añade temperatura y humedad en un solo chip.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">presión</span>
+          <span class="tag tag-teal">altitud</span>
+          <span class="tag tag-gray">I2C/SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">💛</span>
+        <div class="card-name">Sensor de color (TCS3200)</div>
+        <div class="card-desc">Convierte la intensidad de color a frecuencia de pulso digital. Detecta rojo, verde, azul y luminosidad.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">color</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- COMUNICACIÓN -->
+  <section class="section accent-blue" id="comunicacion">
+    <div class="section-header">
+      <div class="section-icon">📡</div>
+      <h2 class="section-title">Módulos de Comunicación</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">8 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">📶</span>
+        <div class="card-name">ESP8266 (ESP-01)</div>
+        <div class="card-desc">Módulo WiFi que añade conectividad a internet vía UART o puede funcionar de forma independiente como SoC.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">WiFi</span>
+          <span class="tag tag-blue">IoT</span>
+          <span class="tag tag-gray">UART</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔵</span>
+        <div class="card-name">HC-05 / HC-06</div>
+        <div class="card-desc">Módulos Bluetooth clásico. HC-05 puede ser maestro o esclavo; HC-06 solo esclavo. Comunicación serial inalámbrica.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">Bluetooth</span>
+          <span class="tag tag-gray">UART</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📻</span>
+        <div class="card-name">nRF24L01</div>
+        <div class="card-desc">Transceptor de radio 2.4GHz de bajo consumo. Hasta 1Mbps, 125 canales y 6 tubos de datos simultáneos.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">2.4GHz</span>
+          <span class="tag tag-blue">radio</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📍</span>
+        <div class="card-name">Módulo GPS (NEO-6M)</div>
+        <div class="card-desc">Receptor GPS con antena cerámica. Protocolo NMEA por UART. Precisión de 2.5m CEP para geolocalización.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">GPS</span>
+          <span class="tag tag-blue">geolocalización</span>
+          <span class="tag tag-gray">UART</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📱</span>
+        <div class="card-name">Módulo GSM/SIM800L</div>
+        <div class="card-desc">Comunicación celular GSM/GPRS. Permite llamadas, SMS e internet móvil. Opera en bandas de 850/900/1800/1900MHz.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">GSM</span>
+          <span class="tag tag-blue">SMS</span>
+          <span class="tag tag-gray">UART</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🏷️</span>
+        <div class="card-name">RFID RC522</div>
+        <div class="card-desc">Lector/escritor de tarjetas RFID a 13.56MHz. Compatible con tarjetas Mifare. Distancia de lectura hasta 5cm.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">RFID</span>
+          <span class="tag tag-blue">NFC</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌿</span>
+        <div class="card-name">LoRa SX1278</div>
+        <div class="card-desc">Módulo de radio de largo alcance (LoRa) a 433/868/915MHz. Alcance de hasta 10km en campo abierto, bajo consumo.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">LoRa</span>
+          <span class="tag tag-blue">largo alcance</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔗</span>
+        <div class="card-name">Módulo I2C (PCF8574)</div>
+        <div class="card-desc">Expansor de pines GPIO vía I2C. Permite controlar hasta 8 pines digitales con solo 2 cables del bus I2C.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">expansión</span>
+          <span class="tag tag-gray">I2C</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ACTUADORES -->
+  <section class="section accent-amber" id="actuadores">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <h2 class="section-title">Actuadores</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">8 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">🔄</span>
+        <div class="card-name">Servo Motor (SG90)</div>
+        <div class="card-desc">Servo de 180° con torque de 1.8kg·cm. Control por PWM (señal de 50Hz, pulso 1–2ms). Ideal para brazos robóticos.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">servo</span>
+          <span class="tag tag-amber">PWM</span>
+          <span class="tag tag-gray">5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌀</span>
+        <div class="card-name">Motor DC + L298N</div>
+        <div class="card-desc">Motor de corriente continua controlado con el puente H L298N. Permite control de velocidad y dirección con PWM.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">motor DC</span>
+          <span class="tag tag-amber">puente H</span>
+          <span class="tag tag-gray">PWM</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔩</span>
+        <div class="card-name">Motor paso a paso (28BYJ-48)</div>
+        <div class="card-desc">Stepper de 5V con driver ULN2003. 64 pasos por vuelta (con reducción 1:64). Posicionamiento preciso sin encoder.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">stepper</span>
+          <span class="tag tag-amber">precisión</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">💧</span>
+        <div class="card-name">Bomba de agua (mini sumergible)</div>
+        <div class="card-desc">Bomba DC de 3–6V para proyectos de riego automatizado. Se controla con un transistor NPN o módulo relay.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">bomba</span>
+          <span class="tag tag-amber">riego</span>
+          <span class="tag tag-gray">relay</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔊</span>
+        <div class="card-name">Buzzer / Zumbador</div>
+        <div class="card-desc">Zumbador activo (tono fijo) o pasivo (tono por frecuencia PWM). Genera alertas sonoras y melodías simples.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">audio</span>
+          <span class="tag tag-amber">PWM</span>
+          <span class="tag tag-gray">digital</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">💡</span>
+        <div class="card-name">LED RGB (WS2812B)</div>
+        <div class="card-desc">LED inteligente direccionable con controlador integrado. Hasta 255 colores por canal. Se encadenan con 1 solo pin de datos.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">LED</span>
+          <span class="tag tag-amber">NeoPixel</span>
+          <span class="tag tag-gray">5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔌</span>
+        <div class="card-name">Módulo Relay</div>
+        <div class="card-desc">Permite a Arduino controlar cargas de alta tensión (AC 220V / DC 30V). Optoacoplador para aislamiento eléctrico.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">relay</span>
+          <span class="tag tag-amber">AC</span>
+          <span class="tag tag-gray">5V control</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌬️</span>
+        <div class="card-name">Ventilador / Fan DC</div>
+        <div class="card-desc">Cooler de 5V o 12V controlado por PWM o relay. Usado en control de temperatura y disipación de calor.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">cooling</span>
+          <span class="tag tag-amber">PWM</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PANTALLAS -->
+  <section class="section accent-purple" id="pantallas">
+    <div class="section-header">
+      <div class="section-icon">🖥️</div>
+      <h2 class="section-title">Pantallas y Displays</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">6 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">📟</span>
+        <div class="card-name">LCD 16x2 (con I2C)</div>
+        <div class="card-desc">Display de cristal líquido de 16 columnas por 2 filas. El adaptador I2C reduce de 12 pines a solo 2 (SDA/SCL).</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">LCD</span>
+          <span class="tag tag-gray">I2C</span>
+          <span class="tag tag-gray">5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔲</span>
+        <div class="card-name">OLED 0.96" (SSD1306)</div>
+        <div class="card-desc">Display OLED monocromático de 128×64 píxeles. Alto contraste, sin retroiluminación. Librería Adafruit SSD1306.</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">OLED</span>
+          <span class="tag tag-gray">I2C/SPI</span>
+          <span class="tag tag-gray">3.3V/5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📺</span>
+        <div class="card-name">TFT LCD 2.4" (ILI9341)</div>
+        <div class="card-desc">Pantalla TFT a color de 320×240px con pantalla táctil resistiva. Visualización de gráficos e interfaces de usuario.</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">TFT</span>
+          <span class="tag tag-purple">color</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔢</span>
+        <div class="card-name">Display 7 segmentos (TM1637)</div>
+        <div class="card-desc">Display de 4 dígitos de 7 segmentos. Interfaz simple de 2 hilos. Perfecto para relojes y contadores numéricos.</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">7 segmentos</span>
+          <span class="tag tag-gray">TM1637</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌈</span>
+        <div class="card-name">Matriz de LEDs 8x8 (MAX7219)</div>
+        <div class="card-desc">Módulo con 64 LEDs controlados por el chip MAX7219 via SPI. Se encadena fácilmente para crear matrices más grandes.</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">matriz LED</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📦</span>
+        <div class="card-name">E-Paper / E-Ink</div>
+        <div class="card-desc">Display de tinta electrónica de bajo consumo. Retiene imagen sin energía. Ideal para etiquetas de precio y señalética.</div>
+        <div class="card-tags">
+          <span class="tag tag-purple">e-ink</span>
+          <span class="tag tag-purple">bajo consumo</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ALMACENAMIENTO -->
+  <section class="section accent-coral" id="almacenamiento">
+    <div class="section-header">
+      <div class="section-icon">💾</div>
+      <h2 class="section-title">Almacenamiento y Reloj</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">4 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">🃏</span>
+        <div class="card-name">Módulo MicroSD</div>
+        <div class="card-desc">Permite leer y escribir en tarjetas MicroSD con sistema de archivos FAT32. Usado para data logging y almacenamiento.</div>
+        <div class="card-tags">
+          <span class="tag tag-coral">microSD</span>
+          <span class="tag tag-coral">FAT32</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🕐</span>
+        <div class="card-name">RTC DS3231</div>
+        <div class="card-desc">Reloj de tiempo real de alta precisión (±2ppm) con batería de respaldo CR2032. Mantiene hora sin Arduino encendido.</div>
+        <div class="card-tags">
+          <span class="tag tag-coral">RTC</span>
+          <span class="tag tag-coral">tiempo real</span>
+          <span class="tag tag-gray">I2C</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🧠</span>
+        <div class="card-name">EEPROM externa (AT24C256)</div>
+        <div class="card-desc">Memoria no volátil de 256Kbit (32KB). Útil cuando la EEPROM interna de Arduino no es suficiente.</div>
+        <div class="card-tags">
+          <span class="tag tag-coral">EEPROM</span>
+          <span class="tag tag-coral">no volátil</span>
+          <span class="tag tag-gray">I2C</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">📼</span>
+        <div class="card-name">Flash SPI (W25Q32)</div>
+        <div class="card-desc">Memoria Flash de 32Mbit vía SPI. Velocidades de lectura altas. Usado para almacenar firmware, imágenes y audio.</div>
+        <div class="card-tags">
+          <span class="tag tag-coral">Flash</span>
+          <span class="tag tag-gray">SPI</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ALIMENTACIÓN -->
+  <section class="section accent-amber" id="fuente">
+    <div class="section-header">
+      <div class="section-icon">🔋</div>
+      <h2 class="section-title">Módulos de Alimentación</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">5 componentes</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">🔋</span>
+        <div class="card-name">Módulo TP4056</div>
+        <div class="card-desc">Cargador de baterías LiPo/Li-ion vía microUSB con protección integrada (sobrecarga, sobredescarga, cortocircuito).</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">LiPo</span>
+          <span class="tag tag-amber">carga</span>
+          <span class="tag tag-gray">1A max</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">⬇️</span>
+        <div class="card-name">Regulador Buck (LM2596)</div>
+        <div class="card-desc">Convertidor reductor DC-DC ajustable de hasta 3A. Eficiencia superior al 92% frente a reguladores lineales.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">buck</span>
+          <span class="tag tag-amber">DC-DC</span>
+          <span class="tag tag-gray">3A</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">⬆️</span>
+        <div class="card-name">Regulador Boost (MT3608)</div>
+        <div class="card-desc">Convertidor elevador DC-DC. Sube voltaje de 2V–24V a salida ajustable de hasta 28V. Para alimentar desde batería pequeña.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">boost</span>
+          <span class="tag tag-amber">DC-DC</span>
+          <span class="tag tag-gray">2A</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔌</span>
+        <div class="card-name">Módulo de 5V (AMS1117)</div>
+        <div class="card-desc">Regulador lineal LDO de 5V o 3.3V. Simple y económico, aunque menos eficiente que soluciones switching.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">LDO</span>
+          <span class="tag tag-gray">lineal</span>
+          <span class="tag tag-gray">1A</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">☀️</span>
+        <div class="card-name">Panel solar + MPPT</div>
+        <div class="card-desc">Módulo fotovoltaico con controlador MPPT (CN3791). Carga baterías desde energía solar con seguimiento del punto de máxima potencia.</div>
+        <div class="card-tags">
+          <span class="tag tag-amber">solar</span>
+          <span class="tag tag-amber">MPPT</span>
+          <span class="tag tag-amber">sustentable</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PLACAS -->
+  <section class="section accent-teal" id="placas">
+    <div class="section-header">
+      <div class="section-icon">🖥️</div>
+      <h2 class="section-title">Placas Arduino</h2>
+      <div class="section-divider"></div>
+      <span class="section-count">6 placas</span>
+    </div>
+    <div class="component-grid">
+
+      <div class="card">
+        <span class="card-emoji">🟦</span>
+        <div class="card-name">Arduino Uno R3</div>
+        <div class="card-desc">La placa más popular. ATmega328P, 14 pines digitales, 6 analógicos, 32KB Flash. Ideal para aprender y prototipar.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">principiante</span>
+          <span class="tag tag-teal">328P</span>
+          <span class="tag tag-gray">5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">⬛</span>
+        <div class="card-name">Arduino Nano</div>
+        <div class="card-desc">Versión compacta del Uno en formato DIP. Mismo ATmega328P pero con menor footprint. Perfecto para proyectos pequeños.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">compacto</span>
+          <span class="tag tag-teal">328P</span>
+          <span class="tag tag-gray">mini-USB</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔷</span>
+        <div class="card-name">Arduino Mega 2560</div>
+        <div class="card-desc">54 pines digitales, 16 analógicos, 256KB Flash. Para proyectos complejos que requieren muchos pines o memoria extra.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">avanzado</span>
+          <span class="tag tag-teal">2560</span>
+          <span class="tag tag-gray">5V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🌐</span>
+        <div class="card-name">Arduino MKR WiFi 1010</div>
+        <div class="card-desc">Placa compacta con WiFi y Bluetooth integrado (módulo NINA-W102). Opera a 3.3V. Diseñada para IoT industrial.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">WiFi</span>
+          <span class="tag tag-teal">BLE</span>
+          <span class="tag tag-gray">3.3V</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🔬</span>
+        <div class="card-name">Arduino Pro Mini</div>
+        <div class="card-desc">Placa mínima sin puerto USB. Requiere programador externo (FTDI). Versiones de 3.3V/8MHz y 5V/16MHz para bajo consumo.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">ultra compacto</span>
+          <span class="tag tag-teal">bajo consumo</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="card-emoji">🤖</span>
+        <div class="card-name">Arduino Due</div>
+        <div class="card-desc">Basado en ARM Cortex-M3 de 32 bits a 84MHz con 512KB Flash. El más potente de la familia clásica de Arduino.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">ARM</span>
+          <span class="tag tag-teal">32 bits</span>
+          <span class="tag tag-gray">3.3V</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <span class="footer-text">// arduino_componentes_ref — 2024</span>
+  <div class="footer-links">
+    <a href="https://www.arduino.cc/reference/en/" target="_blank">Referencia oficial →</a>
+    <a href="https://docs.arduino.cc/" target="_blank">Documentación →</a>
+  </div>
+</footer>
+
+</div>
+
+<script>
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  document.querySelectorAll('.card').forEach(card => {
+    const text = card.textContent.toLowerCase();
+    card.style.display = (!q || text.includes(q)) ? '' : 'none';
+  });
+  document.querySelectorAll('.section').forEach(sec => {
+    const visible = [...sec.querySelectorAll('.card')].some(c => c.style.display !== 'none');
+    sec.style.display = visible ? '' : 'none';
+  });
+}
+
+// Smooth scroll for nav
+document.querySelectorAll('.nav-pill').forEach(pill => {
+  pill.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(pill.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>
